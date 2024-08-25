@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Определение местоположения</title>
+</head>
+<body>
+    <h1>Определяем ваше местоположение...</h1>
+    <p id="status">Пожалуйста, подождите...</p>
+
+    <script>
+        // Проверка на доступность геолокации
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                // Получение координат
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // Отправка данных в Telegram через WebApp
+                window.Telegram.WebApp.sendData(JSON.stringify({
+                    latitude: latitude,
+                    longitude: longitude
+                }));
+
+                document.getElementById('status').textContent = Ваше местоположение: ${latitude}, ${longitude};
+            }, () => {
+                document.getElementById('status').textContent = 'Не удалось определить местоположение.';
+            });
+        } else {
+            document.getElementById('status').textContent = 'Ваш браузер не поддерживает геолокацию.';
+        }
+    </script>
+</body>
+</html>
